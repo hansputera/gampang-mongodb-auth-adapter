@@ -1,6 +1,6 @@
 import {Core} from 'gampang';
 import type {Collection, Document, WithId} from 'mongodb';
-import {unsetProp} from './utils';
+import {unsetProp, wrapBuffMongo} from './utils';
 
 export const writeThing = async <T>(
     collection: Collection,
@@ -9,13 +9,16 @@ export const writeThing = async <T>(
 ) =>
     collection.updateOne(
         {
-            $where: `this._id === "${key}"`,
+            $where: `this.id === "${key}"`,
         },
         {
             $set: {
-                _id: key,
+                id: key,
                 ...value,
             },
+        },
+        {
+            upsert: true,
         },
     );
 
@@ -26,11 +29,12 @@ export const getKeys = async <T extends keyof Core.SignalDataTypeMap>(
 ): Promise<Record<string, Core.SignalDataTypeMap[T]>> => {
     const data = (await collection
         .find({
-            $or: ids.map((id) => ({
-                $where: `this._id === "${type}-${id}"`,
-            })),
+            $where: `[${ids
+                .map((x) => `"${type}-${x}"`)
+                .join(',')}].includes(this.id)`,
         })
         .map((doc) => {
+            doc = wrapBuffMongo(doc);
             if (doc._id.toString() === 'app-state-sync-key') {
                 return Core.proto.Message.AppStateSyncKeyData.fromObject(doc);
             } else return doc;
@@ -38,7 +42,7 @@ export const getKeys = async <T extends keyof Core.SignalDataTypeMap>(
         .toArray()) as WithId<Document>[];
 
     return Object.fromEntries(
-        data.map((doc) => [doc._id, unsetProp(doc, '_id')]),
+        data.map((doc) => [doc.id, unsetProp(doc, '_id')]),
     );
 };
 

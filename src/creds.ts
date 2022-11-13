@@ -1,5 +1,6 @@
 import {Core} from 'gampang';
-import {Collection} from 'mongodb';
+import type {Collection} from 'mongodb';
+import {wrapBuffMongo} from './utils';
 
 // mongodb creds schema
 // _id = cred key
@@ -10,7 +11,12 @@ export const readCreds = async (
 ): Promise<Core.AuthenticationCreds> => {
     const creds = (await collection
         .find()
-        .map((doc) => [doc._id, doc.value])
+        .map((doc) => [
+            doc.id,
+            typeof doc.value === 'object'
+                ? wrapBuffMongo(doc.value)
+                : doc.value,
+        ])
         .toArray()) as any[];
     if (!creds?.length) return Core.initAuthCreds();
     return Object.fromEntries(creds) as Core.AuthenticationCreds;
@@ -23,11 +29,11 @@ export const saveCreds = async (
     for (const credential of Object.entries(creds)) {
         await collection.updateOne(
             {
-                $where: `this._id === "${credential[0]}"`,
+                $where: `this.id === "${credential[0]}"`,
             },
             {
                 $set: {
-                    _id: credential[0],
+                    id: credential[0],
                     value: credential[1],
                 },
             },
