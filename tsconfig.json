@@ -1,0 +1,8 @@
+{
+    "extends": "@bilibili-dl/config/tsconfig.base.json",
+    "compilerOptions": {
+        "outDir": "./dist"
+    },
+    "exclude": ["node_modules/**/*", "dist/**/*"],
+    "include": ["src/**/*"]
+}
