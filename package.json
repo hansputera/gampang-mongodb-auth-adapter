@@ -24,5 +24,8 @@
         "lint:fix": "npm run lint --fix",
         "pretty": "prettier . --write",
         "build": "tsup"
+    },
+    "dependencies": {
+        "mongodb": "^4.11.0"
     }
 }
