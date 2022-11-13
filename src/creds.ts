@@ -23,9 +23,7 @@ export const saveCreds = async (
     for (const credential of Object.entries(creds)) {
         await collection.updateOne(
             {
-                $where: {
-                    _id: credential[0],
-                },
+                $where: `this._id === "${credential[0]}"`,
             },
             {
                 $set: {

@@ -9,9 +9,7 @@ export const writeThing = async <T>(
 ) =>
     collection.updateOne(
         {
-            $where: {
-                _id: key,
-            },
+            $where: `this._id === "${key}"`,
         },
         {
             $set: {
@@ -27,11 +25,9 @@ export const getKeys = async <T extends keyof Core.SignalDataTypeMap>(
 ): Promise<Record<string, Core.SignalDataTypeMap[T]>> => {
     const data = (await collection
         .find({
-            $where: {
-                _id: {
-                    $in: ids.map((id) => `${type}-${id}`),
-                },
-            },
+            $or: ids.map((id) => ({
+                $where: `this._id === "${type}-${id}"`,
+            })),
         })
         .map((doc) => {
             if (doc._id.toString() === 'app-state-sync-key') {
