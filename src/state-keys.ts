@@ -34,7 +34,7 @@ export const getKeys = async <T extends keyof Core.SignalDataTypeMap>(
                 .join(',')}].includes(this.id)`,
         })
         .map((doc) => {
-            doc = wrapBuffMongo(doc.value);
+            doc.value = wrapBuffMongo(doc.value);
             if (doc.id === 'app-state-sync-key') {
                 doc.value = Core.proto.Message.AppStateSyncKeyData.fromObject(
                     doc.value,
