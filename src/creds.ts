@@ -12,7 +12,7 @@ export const readCreds = async (
         .find()
         .map((doc) => [doc._id, doc.value])
         .toArray()) as any[];
-    if (!creds) return Core.initAuthCreds();
+    if (!creds?.length) return Core.initAuthCreds();
     return Object.fromEntries(creds) as Core.AuthenticationCreds;
 };
 
