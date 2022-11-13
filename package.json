@@ -1,6 +1,6 @@
 {
     "name": "@gampang-pkg/mongodb-adapter",
-    "version": "1.0.13",
+    "version": "1.0.14",
     "description": "Auth Session MongoDB Adapter for Gampang",
     "main": "dist/index.js",
     "typings": "dist/index.d.ts",
