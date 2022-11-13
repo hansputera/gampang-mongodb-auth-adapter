@@ -26,6 +26,7 @@
         "build": "tsup"
     },
     "dependencies": {
+        "gampang": "^1.6.2",
         "mongodb": "^4.11.0"
     }
 }
