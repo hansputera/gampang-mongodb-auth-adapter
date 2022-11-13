@@ -1,6 +1,6 @@
 import {Core} from 'gampang';
 import type {Collection, Document, WithId} from 'mongodb';
-import {unsetProp, wrapBuffMongo} from './utils';
+import {wrapBuffMongo} from './utils';
 
 export const writeThing = async <T>(
     collection: Collection,
@@ -14,7 +14,7 @@ export const writeThing = async <T>(
         {
             $set: {
                 id: key,
-                ...value,
+                value,
             },
         },
         {
@@ -34,16 +34,18 @@ export const getKeys = async <T extends keyof Core.SignalDataTypeMap>(
                 .join(',')}].includes(this.id)`,
         })
         .map((doc) => {
-            doc = wrapBuffMongo(doc);
+            doc = wrapBuffMongo(doc.value);
             if (doc._id.toString() === 'app-state-sync-key') {
-                return Core.proto.Message.AppStateSyncKeyData.fromObject(doc);
-            } else return doc;
+                doc.value = Core.proto.Message.AppStateSyncKeyData.fromObject(
+                    doc.value,
+                );
+            }
+
+            return doc;
         })
         .toArray()) as WithId<Document>[];
 
-    return Object.fromEntries(
-        data.map((doc) => [doc.id, unsetProp(doc, '_id')]),
-    );
+    return Object.fromEntries(data.map((doc) => [doc.id, doc.value]));
 };
 
 export const setKeys = async (
