@@ -13,6 +13,7 @@ export const writeThing = async <T>(
         },
         {
             $set: {
+                _id: key,
                 ...value,
             },
         },
