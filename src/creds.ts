@@ -27,6 +27,7 @@ export const saveCreds = async (
             },
             {
                 $set: {
+                    _id: credential[0],
                     value: credential[1],
                 },
             },
