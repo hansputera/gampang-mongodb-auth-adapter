@@ -26,3 +26,6 @@ export const useMongoDBAdapter: Adapter<Options> = async (_, __, args) => {
 };
 
 export * as Utils from './utils';
+// debug purposes
+export * as StateKeys from './state-keys';
+export * as Creds from './creds';
