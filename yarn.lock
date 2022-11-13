@@ -953,7 +953,7 @@ __metadata:
     eslint: ^8.27.0
     eslint-config-google: ^0.14.0
     eslint-config-prettier: ^8.5.0
-    gampang: ^1.6.3
+    gampang: ^1.6.4
     mongodb: ^4.11.0
     prettier: ^2.7.1
     tsup: ^6.4.0
@@ -2546,9 +2546,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gampang@npm:^1.6.3":
-  version: 1.6.3
-  resolution: "gampang@npm:1.6.3"
+"gampang@npm:^1.6.4":
+  version: 1.6.4
+  resolution: "gampang@npm:1.6.4"
   dependencies:
     "@adiwajshing/baileys": "github:hansputera/Baileys"
     "@peculiar/webcrypto": ^1.4.1
@@ -2556,7 +2556,7 @@ __metadata:
     pino: ^8.7.0
     pino-pretty: ^9.1.1
     qrcode: ^1.5.1
-  checksum: 7ad81736a91808860b95c52dcb67d1e1f5f523fc77a6f7a84804b0012cb0dd8fdb12265e803de99007e7f4da63ee213c7650f4ecaa160fee9fd782ff161ad7c2
+  checksum: 8ecdf1cd12c82b62f42d28adb73d02dc1f6ea7d15b275dfc42bb768346dd83db37879e87e57d26c514edd0719bbc112ad55e4b13c5e1755da6b86584a02808fa
   languageName: node
   linkType: hard
 
