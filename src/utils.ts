@@ -1,4 +1,4 @@
-import {MongoClient, MongoClientOptions} from 'mongodb';
+import {Binary, MongoClient, MongoClientOptions} from 'mongodb';
 import * as assert from 'node:assert';
 import type {Options} from './@types';
 
@@ -40,4 +40,25 @@ export const unsetProp = <T extends Record<K, unknown>, K extends keyof T>(
     }
 
     return obj;
+};
+
+export const wrapBuffMongo = <T extends Record<string, any>>(data: T): T => {
+    if (!data) return data;
+    for (const key of Object.keys(data)) {
+        if (data[key] instanceof Binary) {
+            Reflect.set(data, key, data[key].buffer);
+        } else if (typeof data[key] === 'object') {
+            if (Array.isArray(data[key])) {
+                Reflect.set(
+                    data,
+                    key,
+                    data[key].map((v: {}) => wrapBuffMongo(v)),
+                );
+            }
+
+            Reflect.set(data, key, wrapBuffMongo(data[key]));
+        }
+    }
+
+    return data;
 };
