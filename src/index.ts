@@ -24,3 +24,5 @@ export const useMongoDBAdapter: Adapter<Options> = async (_, __, args) => {
         save: () => saveCreds(db.collection('credentials'), creds),
     };
 };
+
+export * as Utils from './utils';
