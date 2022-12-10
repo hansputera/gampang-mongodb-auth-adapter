@@ -8,6 +8,7 @@ import {wrapBuffMongo} from './utils';
 
 export const readCreds = async (
     collection: Collection,
+    verbose: boolean
 ): Promise<Core.AuthenticationCreds> => {
     const creds = (await collection
         .find()
@@ -19,17 +20,20 @@ export const readCreds = async (
         ])
         .toArray()) as any[];
     if (!creds?.length) return Core.initAuthCreds();
+    if (verbose) console.log('[GAMPANG-MONGO-ADAPTER#readCreds]: found', creds.length, 'credentials');
     return Object.fromEntries(creds) as Core.AuthenticationCreds;
 };
 
 export const saveCreds = async (
     collection: Collection,
     creds: Core.AuthenticationCreds,
+    verbose: boolean
 ): Promise<void> => {
+    if (verbose) console.log('[GAMPANG-MONGO-ADAPTER#saveCreds]: called');
     for (const credential of Object.entries(creds)) {
         await collection.updateOne(
             {
-                $where: `this.id === "${credential[0]}"`,
+                id: credential[0],
             },
             {
                 $set: {

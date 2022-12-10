@@ -11,17 +11,17 @@ export const useMongoDBAdapter: Adapter<Options> = async (_, __, args) => {
         args.dbName,
     );
 
-    const creds = await readCreds(db.collection('credentials'));
+    const creds = await readCreds(db.collection('credentials'), !!args.verbose);
 
     return {
         state: {
             creds,
             keys: {
-                get: (type, ids) => getKeys(db.collection('keys'), type, ids),
-                set: (data) => setKeys(db.collection('keys'), data),
+                get: (type, ids) => getKeys(db.collection('keys'), type, ids, !!args.verbose),
+                set: (data) => setKeys(db.collection('keys'), data, !!args.verbose),
             },
         },
-        save: () => saveCreds(db.collection('credentials'), creds),
+        save: () => saveCreds(db.collection('credentials'), creds, !!args.verbose),
     };
 };
 

@@ -21,4 +21,9 @@ export type Options = {
      * @type {string}
      */
     uri: string;
+
+    /**
+     * Verbose mode
+     */
+    verbose?: boolean;
 };
